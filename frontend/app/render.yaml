@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: electricity-board-backend
+    env: python
+    buildCommand: |
+      pip install -r backend/project/requirements.txt
+      cd frontend/app && npm install && npm run build
+      python backend/project/manage.py collectstatic --noinput
+    startCommand: gunicorn backend.project.wsgi:application
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: backend.project.settings
+      - key: PYTHON_VERSION
+        value: 3.10
